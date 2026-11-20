@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf7ee">
+  <meta name="description" content="Consulte a disponibilidade de babás na Porto Baby Care em Porto de Galinhas.">
+  <title>Verificando disponibilidade — Porto Baby Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-950:#0d3022;
+      --green-900:#14402c;
+      --green-800:#1b5539;
+      --green-700:#256b49;
+      --gold:#c9a15a;
+      --cream:#fbf7ee;
+      --cream-2:#f5edda;
+      --ink:#213027;
+      --muted:#65756b;
+      --line:#e5dac4;
+      --white:#ffffff;
+      --shadow:0 18px 45px rgba(13,48,34,.13);
+      --serif:"Playfair Display", Georgia, serif;
+      --sans:"DM Sans", system-ui, -apple-system, sans-serif;
+    }
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; display:flex; flex-direction:column; background:var(--cream); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+    img { display:block; max-width:100%; }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; }
+    :focus-visible { outline:3px solid var(--gold); outline-offset:3px; }
+    .container { width:min(1120px, 100% - 40px); margin-inline:auto; }
+    [hidden] { display:none!important; }
+
+    /* Cabeçalho (mesma identidade da landing page) */
+    .site-header { position:sticky; top:0; z-index:50; background:rgba(251,247,238,.96); backdrop-filter:blur(14px); border-bottom:1px solid rgba(201,161,90,.28); }
+    .header-inner { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:72px; }
+    .brand { display:flex; align-items:center; gap:10px; min-width:0; }
+    .brand-mark { width:54px; height:46px; flex:none; object-fit:contain; }
+    .brand-name { font-family:var(--serif); font-weight:700; font-size:1.02rem; line-height:1.02; letter-spacing:.01em; color:var(--green-950); white-space:nowrap; }
+    .brand-name small { display:block; margin-top:5px; font:700 6.8px/1.25 var(--sans); letter-spacing:.08em; color:var(--green-700); }
+    .header-actions { display:flex; align-items:center; gap:10px; }
+    .btn-wa-top { display:none; }
+    .menu-toggle { width:44px; height:44px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; background:transparent; color:var(--green-900); cursor:pointer; }
+    .menu-toggle svg { width:22px; height:22px; }
+    .menu-toggle .icon-close { display:none; }
+    .menu-toggle[aria-expanded="true"] .icon-open { display:none; }
+    .menu-toggle[aria-expanded="true"] .icon-close { display:block; }
+    .nav { display:none; position:absolute; top:100%; left:0; right:0; padding:8px 20px 20px; background:var(--cream); border-bottom:1px solid var(--line); box-shadow:0 18px 30px rgba(13,48,34,.12); }
+    .nav.is-open { display:block; }
+    .nav a { display:block; padding:14px 2px; border-bottom:1px solid rgba(201,161,90,.22); font-size:.94rem; font-weight:600; color:var(--green-950); }
+    .nav .nav-wa { display:flex; align-items:center; justify-content:center; gap:9px; margin-top:14px; border:0; border-radius:999px; background:var(--green-900); color:#fff; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:52px; padding:0 24px; border:0; border-radius:999px; font-weight:700; font-size:.94rem; cursor:pointer; }
+    .btn-wa-top { min-height:42px; padding:0 18px; font-size:.84rem; }
+    .btn svg { width:19px; height:19px; flex:none; }
+
+    /* Resultado da busca */
+    main { flex:1; }
+    .result-wrap { display:grid; place-items:center; padding:46px 0 60px; }
+    .result-card { width:min(560px,100%); margin-inline:auto; padding:32px 24px 28px; border:1px solid rgba(201,161,90,.45); border-radius:28px; background:#fff; box-shadow:var(--shadow); text-align:center; }
+    .brand-mini img { width:58px; height:58px; object-fit:contain; margin:0 auto 12px; }
+    .kicker { margin:0 0 10px; color:var(--green-700); font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { margin:0 0 8px; font-family:var(--serif); font-size:clamp(1.8rem,7vw,2.4rem); line-height:1.15; color:var(--green-950); }
+    .sub { margin:0; color:var(--muted); font-size:.92rem; }
+    .progress { height:10px; margin:30px 0 12px; overflow:hidden; border-radius:999px; background:var(--cream-2); }
+    .progress-bar { height:100%; width:6%; border-radius:999px; background:linear-gradient(90deg,var(--green-700),var(--gold)); animation:carregar 2.4s ease-in-out forwards; }
+    @keyframes carregar { 0%{width:6%} 60%{width:78%} 100%{width:100%} }
+    .loading-label { margin:0; color:var(--muted); font-size:.82rem; }
+    .loading-steps { display:grid; gap:8px; margin:22px auto 0; max-width:300px; text-align:left; }
+    .loading-steps span { height:10px; border-radius:99px; background:var(--cream-2); animation:pulso 1.2s ease-in-out infinite alternate; }
+    .loading-steps span:nth-child(2) { animation-delay:.2s; }
+    .loading-steps span:nth-child(3) { animation-delay:.4s; }
+    @keyframes pulso { from{opacity:.45} to{opacity:1} }
+    .success-icon { width:64px; height:64px; display:grid; place-items:center; margin:0 auto 16px; border-radius:50%; background:var(--cream-2); color:var(--green-800); font-size:1.9rem; line-height:1; }
+    .result-title { margin:0 0 8px; font-family:var(--serif); font-size:1.6rem; color:var(--green-950); }
+    .result-text { margin:0 auto; max-width:42ch; font-size:.98rem; line-height:1.6; color:var(--ink); }
+    .resumo { display:grid; gap:9px; margin:24px 0; padding:15px 17px; border-radius:16px; background:var(--cream); text-align:left; }
+    .resumo div { display:flex; justify-content:space-between; gap:14px; font-size:.84rem; }
+    .resumo span { color:var(--muted); }
+    .resumo strong { color:var(--green-950); text-align:right; overflow-wrap:anywhere; }
+    .btn-contato { width:100%; background:#25a75a; color:#fff; min-height:54px; }
+    .btn-contato:hover { background:#1d8e4b; }
+    .hint { margin:12px 0 0; color:var(--muted); font-size:.75rem; }
+    .back-link { display:inline-flex; align-items:center; gap:8px; margin:24px auto 0; color:var(--green-800); font-size:.85rem; font-weight:700; }
+    .back-link:hover { text-decoration:underline; }
+
+    .site-footer { padding:34px 0 24px; background:var(--green-950); color:rgba(247,242,231,.7); font-size:.82rem; text-align:center; }
+    .footer-logo { width:72px; height:72px; object-fit:contain; margin:0 auto 8px; }
+
+    @media (min-width:900px) {
+      .menu-toggle { display:none; }
+      .nav, .nav.is-open { position:static; display:flex; align-items:center; gap:12px; padding:0; border:0; box-shadow:none; order:2; margin-left:auto; }
+      .nav a { padding:6px 0; border:0; font-size:.8rem; white-space:nowrap; }
+      .btn.btn-wa-top { display:inline-flex; min-height:42px; padding:0 18px; font-size:.84rem; background:var(--green-900); color:#fff; }
+      .brand-mark { width:62px; height:54px; }
+      .brand-name { font-size:1.02rem; }
+      .result-card { padding:40px 44px 36px; }
+      .btn-contato { width:auto; padding:0 36px; }
+    }
+    @media (min-width:1100px) {
+      .nav, .nav.is-open { gap:22px; }
+      .nav a { font-size:.86rem; }
+      .brand-name { font-size:1.18rem; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      .progress-bar { animation-duration:.4s; }
+      .loading-steps span { animation:none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html#inicio" aria-label="Porto Baby Care — início">
+        <img class="brand-mark" src="assets/logo-marca.png" alt="" width="430" height="306">
+        <span class="brand-name">PORTO BABY CARE<small>SEU DESCANSO, NOSSA DEDICAÇÃO.</small></span>
+      </a>
+      <div class="header-actions">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <nav class="nav" id="menu" aria-label="Navegação principal">
+        <a href="index.html#inicio">Início</a>
+        <a href="index.html#servicos">Serviços</a>
+        <a href="index.html#como-funciona">Como Funciona</a>
+        <a href="index.html#sobre">Sobre Nós</a>
+        <a href="index.html#galeria">Momentos</a>
+        <a href="index.html#avaliacoes">Avaliações</a>
+        <a href="index.html#faq">Perguntas Frequentes</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="result-wrap">
+      <div class="container">
+        <div class="result-card">
+          <div class="brand-mini"><img src="assets/logo-marca.png" alt="" width="430" height="306"></div>
+          <p class="kicker">Porto Baby Care</p>
+          <h1 id="titulo">Verificando disponibilidade</h1>
+          <p class="sub" id="subtitulo">Estamos consultando a nossa agenda para a sua data.</p>
+
+          <div id="loadingView" role="status" aria-live="polite">
+            <div class="progress"><div class="progress-bar"></div></div>
+            <p class="loading-label">Buscando babás disponíveis...</p>
+            <div class="loading-steps" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+
+          <div id="resultView" hidden>
+            <div class="success-icon" aria-hidden="true">&#10003;</div>
+            <h2 class="result-title">Busca concluída!</h2>
+            <p class="result-text">Temos <strong id="quantidadeBabas">babás disponíveis</strong> para essa data. Clique abaixo para entrar em contato.</p>
+            <div class="resumo">
+              <div><span>Data</span><strong id="resumoData"></strong></div>
+              <div><span>Local</span><strong id="resumoLocal"></strong></div>
+              <div><span>Idade da criança</span><strong id="resumoIdade"></strong></div>
+            </div>
+            <a class="btn btn-contato" id="botaoWhatsapp" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20l1.2-5.4A8.5 8.5 0 1 1 21 11.5Z"/><path d="M9 9.2c0 3 2.4 5.4 5.4 5.4l1.2-1.6-2-1.1-1 1c-1-.5-1.8-1.3-2.3-2.3l1-1-1.1-2-1.2 1.6Z"/></svg>
+              Entrar em contato
+            </a>
+            <p class="hint">Você já chega no WhatsApp com a mensagem pronta para enviar.</p>
+          </div>
+
+          <a class="back-link" href="index.html#disponibilidade">&#8592; Fazer outra consulta</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <img class="footer-logo" src="assets/logo-oficial.png" alt="Logo da Porto Baby Care" width="512" height="512">
+      <div>Porto Baby Care — Seu descanso, nossa dedicação.</div>
+      <div>Porto de Galinhas — PE</div>
+    </div>
+  </footer>
+
+  <script>
+    const WHATSAPP = "5581992455112";
+
+    // Dados enviados pelo formulário da landing page.
+    const params = new URLSearchParams(location.search);
+    const dataBruta = params.get("data") || "";
+    const local = (params.get("local") || "").trim();
+    const idade = (params.get("idade") || "").trim();
+    let dataFormatada = "não informada";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dataBruta)) {
+      const [ano, mes, dia] = dataBruta.split("-");
+      dataFormatada = `${dia}/${mes}/${ano}`;
+    }
+
+    function preencherTexto(id, valor) {
+      document.getElementById(id).textContent = valor || "não informado";
+    }
+    preencherTexto("resumoData", dataFormatada);
+    preencherTexto("resumoLocal", local);
+    preencherTexto("resumoIdade", idade);
+
+    // Quantidade sorteada a cada consulta (1 a 4), com concordância singular/plural.
+    const quantidade = Math.floor(Math.random() * 4) + 1;
+    const disponibilidade = quantidade === 1 ? "1 babá disponível" : quantidade + " babás disponíveis";
+    document.getElementById("quantidadeBabas").textContent = disponibilidade;
+
+    const mensagem = [
+      "Olá! Acabei de verificar a disponibilidade no site e gostaria de entrar em contato.",
+      "",
+      "Encontrei " + disponibilidade + " para a data informada.",
+      "Data: " + dataFormatada,
+      "Local: " + (local || "não informado"),
+      "Idade da criança: " + (idade || "não informada"),
+      "",
+      "Podem me informar os próximos passos?"
+    ].join("\n");
+    const linkWhatsapp = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(mensagem);
+
+    document.querySelectorAll("[data-wa]").forEach((el) => {
+      el.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(el.dataset.wa);
+    });
+    document.getElementById("botaoWhatsapp").href = linkWhatsapp;
+
+    // Barra de carregamento e exibição do resultado.
+    const reduzido = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(() => {
+      document.getElementById("loadingView").hidden = true;
+      document.getElementById("resultView").hidden = false;
+      document.getElementById("titulo").textContent = "Disponibilidade confirmada";
+      document.getElementById("subtitulo").textContent = "Encontramos profissionais para a sua viagem.";
+    }, reduzido ? 500 : 2600);
+
+    // Menu mobile
+    const toggle = document.getElementById("menuToggle");
+    const menu = document.getElementById("menu");
+    function closeMenu() {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Abrir menu");
+      menu.classList.remove("is-open");
+    }
+    toggle.addEventListener("click", () => {
+      if (toggle.getAttribute("aria-expanded") === "true") return closeMenu();
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "Fechar menu");
+      menu.classList.add("is-open");
+    });
+    menu.addEventListener("click", (e) => { if (e.target.closest("a")) closeMenu(); });
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) closeMenu();
+    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+    matchMedia("(min-width: 900px)").addEventListener("change", closeMenu);
+  </script>
+</body>
+</html>
